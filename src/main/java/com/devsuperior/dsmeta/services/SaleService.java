@@ -1,6 +1,7 @@
 package com.devsuperior.dsmeta.services;
 
 import com.devsuperior.dsmeta.dto.SaleMinDTO;
+import com.devsuperior.dsmeta.dto.SaleReportDTO;
 import com.devsuperior.dsmeta.entities.Sale;
 import com.devsuperior.dsmeta.repositories.SaleRepository;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ public class SaleService {
 		return new SaleMinDTO(entity);
 	}
 
-	public Page<SaleMinDTO> getReport(String minDate, String maxDate, String name, Pageable pageable) {
+	public Page<SaleReportDTO> getReport(String minDate, String maxDate, String name, Pageable pageable) {
 		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
 
 		LocalDate max = (maxDate == null || maxDate.isBlank()) ? today : LocalDate.parse(maxDate, DateTimeFormatter.ISO_DATE);
@@ -36,6 +37,11 @@ public class SaleService {
 		String sellerName = (name == null || name.isBlank()) ? "" : name;
 
 		Page<Sale> result = repository.findSales(min, max, sellerName, pageable);
-		return result.map(SaleMinDTO::new);
+		return result.map(SaleReportDTO::new);
+	}
+
+	public Page<SaleMinDTO> getSummary(String minDate, String maxDate) {
+
+		return null;
 	}
 }
